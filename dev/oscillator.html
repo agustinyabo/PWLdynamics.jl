@@ -41,7 +41,7 @@ ocp = @def begin
 
     tf ∈ R,                variable
     t ∈ [ 0, tf ],         time
-    x = [ x₁, x₂ ] ∈ R²,   state
+    x = ( x₁, x₂ ) ∈ R²,   state
     u ∈ R,                 control
 
     x₁(0) == x₁ᶜ
@@ -77,34 +77,34 @@ Total number of inequality constraints...............:        0
         inequality constraints with only upper bounds:        0
 
 
-Number of Iterations....: 70
+Number of Iterations....: 73
 
                                    (scaled)                 (unscaled)
-Objective...............:   2.2765512010486750e+00    2.2765512010486750e+00
-Dual infeasibility......:   3.7043322019320262e-10    3.7043322019320262e-10
-Constraint violation....:   6.0371707633066762e-12    6.0371707633066762e-12
-Variable bound violation:   1.3737579962480595e-08    1.3737579962480595e-08
-Complementarity.........:   3.9062376633566673e-11    3.9062376633566673e-11
-Overall NLP error.......:   3.7043322019320262e-10    3.7043322019320262e-10
+Objective...............:   2.2765512008894464e+00    2.2765512008894464e+00
+Dual infeasibility......:   2.8595675323991475e-09    2.8595675323991475e-09
+Constraint violation....:   2.7919000444853737e-11    2.7919000444853737e-11
+Variable bound violation:   1.3738286508413466e-08    1.3738286508413466e-08
+Complementarity.........:   1.0000003688009140e-11    1.0000003688009140e-11
+Overall NLP error.......:   2.8595675323991475e-09    2.8595675323991475e-09
 
 
-Number of objective function evaluations             = 75
-Number of objective gradient evaluations             = 71
-Number of equality constraint evaluations            = 75
+Number of objective function evaluations             = 77
+Number of objective gradient evaluations             = 74
+Number of equality constraint evaluations            = 77
 Number of inequality constraint evaluations          = 0
-Number of equality constraint Jacobian evaluations   = 71
+Number of equality constraint Jacobian evaluations   = 74
 Number of inequality constraint Jacobian evaluations = 0
-Number of Lagrangian Hessian evaluations             = 70
-Total seconds in IPOPT                               = 1.180
+Number of Lagrangian Hessian evaluations             = 73
+Total seconds in IPOPT                               = 0.807
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = sol.variable
+tf    = variable(sol)
 tspan = range(0, tf, N)   # time interval
-x₁(t) = sol.state(t)[1]
-x₂(t) = sol.state(t)[2]
-u(t)  = sol.control(t)
+x₁(t) = state(sol)(t)[1]
+x₂(t) = state(sol)(t)[2]
+u(t)  = control(sol)(t)
 
 xticks = ([0, θ₁, x₁ᶜ], [&quot;0&quot;, &quot;θ₁&quot;, &quot;x₁ᶜ&quot;])
 yticks = ([0, θ₂], [&quot;0&quot;, &quot;θ₂&quot;])
@@ -113,7 +113,7 @@ plot!(plt1, x₁.(tspan), x₂.(tspan), label=&quot;optimal trajectory&quot;, xl
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="oscillator-f91a5eb3.svg" alt="Example block output"/><p>&lt;!– ## Resolution through exponential regularization</p><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="oscillator-146d81bb.svg" alt="Example block output"/><p>&lt;!– ## Resolution through exponential regularization</p><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 100             # Value of k for the first iteration
 N = 400
 maxki = 400          # Value of k for the last iteration
@@ -133,34 +133,34 @@ Total number of inequality constraints...............:        0
         inequality constraints with only upper bounds:        0
 
 
-Number of Iterations....: 143
+Number of Iterations....: 112
 
                                    (scaled)                 (unscaled)
-Objective...............:   1.9639905385137570e+00    1.9639905385137570e+00
-Dual infeasibility......:   9.8379984714291879e-13    9.8379984714291879e-13
-Constraint violation....:   2.2204460492503131e-15    2.2204460492503131e-15
-Variable bound violation:   1.3731323633692227e-08    1.3731323633692227e-08
-Complementarity.........:   1.0000004761392147e-11    1.0000004761392147e-11
-Overall NLP error.......:   1.0000004761392147e-11    1.0000004761392147e-11
+Objective...............:   1.9639867483250510e+00    1.9639867483250510e+00
+Dual infeasibility......:   9.9459839669746586e-11    9.9459839669746586e-11
+Constraint violation....:   1.8518520050747611e-13    1.8518520050747611e-13
+Variable bound violation:   1.3731138004402510e-08    1.3731138004402510e-08
+Complementarity.........:   1.0000003638662259e-11    1.0000003638662259e-11
+Overall NLP error.......:   9.9459839669746586e-11    9.9459839669746586e-11
 
 
-Number of objective function evaluations             = 146
-Number of objective gradient evaluations             = 144
-Number of equality constraint evaluations            = 146
+Number of objective function evaluations             = 115
+Number of objective gradient evaluations             = 113
+Number of equality constraint evaluations            = 115
 Number of inequality constraint evaluations          = 0
-Number of equality constraint Jacobian evaluations   = 144
+Number of equality constraint Jacobian evaluations   = 113
 Number of inequality constraint Jacobian evaluations = 0
-Number of Lagrangian Hessian evaluations             = 143
-Total seconds in IPOPT                               = 2.536
+Number of Lagrangian Hessian evaluations             = 112
+Total seconds in IPOPT                               = 1.733
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = sol.variable
+tf    = variable(sol)
 tspan = range(0, tf, N)   # time interval
-x₁(t) = sol.state(t)[1]
-x₂(t) = sol.state(t)[2]
-u(t)  = sol.control(t)
+x₁(t) = state(sol)(t)[1]
+x₂(t) = state(sol)(t)[2]
+u(t)  = control(sol)(t)
 
 xticks = ([0, θ₁, x₁ᶜ], [&quot;0&quot;, &quot;θ₁&quot;, &quot;x₁ᶜ&quot;])
 yticks = ([0, θ₂], [&quot;0&quot;, &quot;θ₂&quot;])
@@ -169,4 +169,4 @@ plot!(plt1, x₁.(tspan), x₂.(tspan), label=&quot;optimal trajectory&quot;, xl
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="oscillator-eec05f22.svg" alt="Example block output"/><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>E. Farcot, J.-L. Gouzé, Periodic solutions of piecewise affine gene network models with non uniform decay rates: the case of a negative feedback loop, Acta biotheoretica 57 (4) (2009) 429–455. –&gt;</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="bistable.html">« Bistable toggle switch</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Wednesday 11 December 2024 13:54">Wednesday 11 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="oscillator-3dd90c7f.svg" alt="Example block output"/><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>E. Farcot, J.-L. Gouzé, Periodic solutions of piecewise affine gene network models with non uniform decay rates: the case of a negative feedback loop, Acta biotheoretica 57 (4) (2009) 429–455. –&gt;</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="bistable.html">« Bistable toggle switch</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.10.1 on <span class="colophon-date" title="Saturday 19 April 2025 14:08">Saturday 19 April 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

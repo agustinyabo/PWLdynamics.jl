@@ -50,7 +50,7 @@ ocp = @def begin
 
     tf ∈ R,                variable
     t ∈ [ 0, tf ],         time
-    x = [ x₁, x₂ ] ∈ R²,   state
+    x = ( x₁, x₂ ) ∈ R²,   state
     u ∈ R,                 control
 
     x(0) == x₀
@@ -85,34 +85,34 @@ Total number of inequality constraints...............:        1
         inequality constraints with only upper bounds:        1
 
 
-Number of Iterations....: 125
+Number of Iterations....: 167
 
                                    (scaled)                 (unscaled)
-Objective...............:   9.1859086534938417e-01    9.1859086534938417e-01
-Dual infeasibility......:   2.4820181007714087e-09    2.4820181007714087e-09
-Constraint violation....:   4.6768700023847032e-12    4.6768700023847032e-12
-Variable bound violation:   1.1365562047060962e-08    1.1365562047060962e-08
-Complementarity.........:   1.0587086539606604e-11    1.0587086539606604e-11
-Overall NLP error.......:   2.4820181007714087e-09    2.4820181007714087e-09
+Objective...............:   9.1863013952332884e-01    9.1863013952332884e-01
+Dual infeasibility......:   3.0797963717742592e-07    3.0797963717742592e-07
+Constraint violation....:   6.5789701464424866e-10    6.5789701464424866e-10
+Variable bound violation:   0.0000000000000000e+00    0.0000000000000000e+00
+Complementarity.........:   1.3363643870544781e-07    1.3363643870544781e-07
+Overall NLP error.......:   3.0797963717742592e-07    3.0797963717742592e-07
 
 
-Number of objective function evaluations             = 130
-Number of objective gradient evaluations             = 126
-Number of equality constraint evaluations            = 130
-Number of inequality constraint evaluations          = 130
-Number of equality constraint Jacobian evaluations   = 126
-Number of inequality constraint Jacobian evaluations = 126
-Number of Lagrangian Hessian evaluations             = 125
-Total seconds in IPOPT                               = 2.249
+Number of objective function evaluations             = 168
+Number of objective gradient evaluations             = 168
+Number of equality constraint evaluations            = 168
+Number of inequality constraint evaluations          = 168
+Number of equality constraint Jacobian evaluations   = 168
+Number of inequality constraint Jacobian evaluations = 168
+Number of Lagrangian Hessian evaluations             = 167
+Total seconds in IPOPT                               = 1.936
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = sol.variable
+tf    = variable(sol)
 tspan = range(0, tf, N)   # time interval
-x₁(t) = sol.state(t)[1]
-x₂(t) = sol.state(t)[2]
-u(t)  = sol.control(t)
+x₁(t) = state(sol)(t)[1]
+x₂(t) = state(sol)(t)[2]
+u(t)  = control(sol)(t)
 
 xticks = ([0, θ₁], [&quot;0&quot;, &quot;θ₁&quot;])
 yticks = ([0, θ₂, x₂ᶠ], [&quot;0&quot;, &quot;θ₂&quot;, &quot;x₂ᶠ&quot;])
@@ -122,7 +122,7 @@ scatter!(plt1, [x₀[1]], [x₀[2]], label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-00bb1fbe.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-34d78ef4.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 50             # Value of k for the first iteration
 N = 400
 maxki = 300          # Value of k for the last iteration
@@ -142,34 +142,34 @@ Total number of inequality constraints...............:        1
         inequality constraints with only upper bounds:        1
 
 
-Number of Iterations....: 243
+Number of Iterations....: 80
 
                                    (scaled)                 (unscaled)
-Objective...............:   9.1716676440786760e-01    9.1716676440786760e-01
-Dual infeasibility......:   1.0411861234294051e-09    1.0411861234294051e-09
-Constraint violation....:   1.4984125051853425e-12    1.4984125051853425e-12
+Objective...............:   9.1727768013612554e-01    9.1727768013612554e-01
+Dual infeasibility......:   2.7452927042759256e-07    2.7452927042759256e-07
+Constraint violation....:   8.2606647078264928e-09    8.2606647078264928e-09
 Variable bound violation:   0.0000000000000000e+00    0.0000000000000000e+00
-Complementarity.........:   5.5108412409947865e-10    5.5108412409947865e-10
-Overall NLP error.......:   1.0411861234294051e-09    1.0411861234294051e-09
+Complementarity.........:   3.8572520903154820e-07    3.8572520903154820e-07
+Overall NLP error.......:   3.8572520903154820e-07    3.8572520903154820e-07
 
 
-Number of objective function evaluations             = 279
-Number of objective gradient evaluations             = 244
-Number of equality constraint evaluations            = 279
-Number of inequality constraint evaluations          = 279
-Number of equality constraint Jacobian evaluations   = 244
-Number of inequality constraint Jacobian evaluations = 244
-Number of Lagrangian Hessian evaluations             = 243
-Total seconds in IPOPT                               = 3.894
+Number of objective function evaluations             = 88
+Number of objective gradient evaluations             = 81
+Number of equality constraint evaluations            = 88
+Number of inequality constraint evaluations          = 88
+Number of equality constraint Jacobian evaluations   = 81
+Number of inequality constraint Jacobian evaluations = 81
+Number of Lagrangian Hessian evaluations             = 80
+Total seconds in IPOPT                               = 0.982
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = sol.variable
+tf    = variable(sol)
 tspan = range(0, tf, N)   # time interval
-x₁(t) = sol.state(t)[1]
-x₂(t) = sol.state(t)[2]
-u(t)  = sol.control(t)
+x₁(t) = state(sol)(t)[1]
+x₂(t) = state(sol)(t)[2]
+u(t)  = control(sol)(t)
 
 xticks = ([0, θ₁], [&quot;0&quot;, &quot;θ₁&quot;])
 yticks = ([0, θ₂, x₂ᶠ], [&quot;0&quot;, &quot;θ₂&quot;, &quot;x₂ᶠ&quot;])
@@ -179,4 +179,4 @@ scatter!(plt1, [x₀[1]], [x₀[2]], label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-7f796789.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Wednesday 11 December 2024 13:54">Wednesday 11 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-fcf373ec.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.10.1 on <span class="colophon-date" title="Saturday 19 April 2025 14:08">Saturday 19 April 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
