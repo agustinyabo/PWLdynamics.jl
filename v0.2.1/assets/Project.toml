@@ -1,0 +1,12 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+NLPModelsIpopt = "f4238b75-b362-5c4c-b852-0801c9a21d71"
+OptimalControl = "5f98b655-cc9a-415a-b60e-744165666948"
+PWLdynamics = "3a975481-f65e-4f93-b353-981d00172cb9"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+
+[compat]
+Documenter = "1.10"
+NLPModelsIpopt = "0.10"
+OptimalControl = "1.0"
+Plots = "1.40"
