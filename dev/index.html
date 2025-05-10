@@ -13,13 +13,13 @@ x = range(0, 4, length=100)
 y1 = (x .&gt; θ)
 y2 = x.^k ./ (x.^k .+ θ^k)
 y3 = 1 .- 1 ./ (1 .+ exp.(k*(x.-θ)))
-plot(x, [y1, y2, y3], label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-1d2087bb.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">using Plots
+plot(x, [y1, y2, y3], label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-b9c0711a.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">using Plots
 k = 5
 u = range(0, 2, length=100)
 y1 = abs.(u .- 1)
 y2 = (u .- 1).*(u.^k .- 1)./(u.^k .+ 1)
 y3 = (u .- 1).*(1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
-plot(u, [y1, y2, y3], label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-78220d07.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/PWLdynamics.jl/PWLdynamics.jl/docs/Project.toml`
+plot(u, [y1, y2, y3], label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-65e8f4db.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/PWLdynamics.jl/PWLdynamics.jl/docs/Project.toml`
   [e30172f5] Documenter v1.11.0
   [f4238b75] NLPModelsIpopt v0.10.4
   [5f98b655] OptimalControl v1.0.3
