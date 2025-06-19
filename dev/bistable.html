@@ -13,8 +13,7 @@ B_{11}=\left\{(x_1,x_2)\in \R^2 \mid \theta_1&lt;x_1&lt;\frac{k_1}{\gamma_1}, \ 
 \end{align}\]</p><p>as shown in the following figure:</p><p><img src="bistable.png" alt="Alt Text"/></p><p>The control objective is to induce a transition between an initial point in <span>$B_{10}$</span> and a final value of <span>$x_2$</span> in <span>$B_{01}$</span>, which can be written through the initial and terminal constraints:</p><p class="math-container">\[    x(0) = x_0 \in B_{10}, \qquad x_1(t_f) &lt; \theta_1, \qquad x_2(t_f) = x_2^f\]</p><p>for free final time <span>$t_f &gt; 0$</span> and for <span>$x_2^f &gt; \theta_2$</span>.</p><h2 id="Problem-definition"><a class="docs-heading-anchor" href="#Problem-definition">Problem definition</a><a id="Problem-definition-1"></a><a class="docs-heading-anchor-permalink" href="#Problem-definition" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Plots
 using Plots.PlotMeasures
 using OptimalControl
-using NLPModelsIpopt
-nothing # hide</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><p>We define the regularization functions, where the method is decided through the argument <code>regMethod</code>.</p><pre><code class="language-julia hljs"># Regularization of the PWL dynamics
+using NLPModelsIpopt</code></pre><p>We define the regularization functions, where the method is decided through the argument <code>regMethod</code>.</p><pre><code class="language-julia hljs"># Regularization of the PWL dynamics
 function s⁺(x, θ, regMethod)
     if regMethod == 1 # Hill
         out = x^k/(x^k + θ^k)
@@ -32,8 +31,7 @@ function abs_m1(u, regMethod)
         out = 1 - 2/(1 + exp(k*(u-1)))
     end
     return out*(u - 1)
-end
-nothing # hide</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><p>Definition of the OCP:</p><pre><code class="language-julia hljs"># Constant definition
+end</code></pre><p>Definition of the OCP:</p><pre><code class="language-julia hljs"># Constant definition
 k₁    = 1;    k₂    = 1     # Production rates
 γ₁    = 1.4;  γ₂    = 1.6   # Degradation rates
 θ₁    = 0.6;  θ₂    = 0.4   # Transcriptional thresholds
@@ -67,8 +65,7 @@ ocp = @def begin
 
     ∫(λ*abs_m1(u(t),regMethod) + 1-λ) → min
 
-end
-nothing # hide</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><h2 id="Resolution-through-Hill-regularization"><a class="docs-heading-anchor" href="#Resolution-through-Hill-regularization">Resolution through Hill regularization</a><a id="Resolution-through-Hill-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-Hill-regularization" title="Permalink"></a></h2><p>In order to ensure convergence of the solver, we solve the OCP by iteratively increasing the parameter <span>$k$</span> while using the <span>$i-1$</span>-th solution as the initialization of the <span>$i$</span>-th iteration.</p><pre><code class="language-julia hljs">regMethod = 1       # Hill regularization
+end</code></pre><h2 id="Resolution-through-Hill-regularization"><a class="docs-heading-anchor" href="#Resolution-through-Hill-regularization">Resolution through Hill regularization</a><a id="Resolution-through-Hill-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-Hill-regularization" title="Permalink"></a></h2><p>In order to ensure convergence of the solver, we solve the OCP by iteratively increasing the parameter <span>$k$</span> while using the <span>$i-1$</span>-th solution as the initialization of the <span>$i$</span>-th iteration.</p><pre><code class="language-julia hljs">regMethod = 1       # Hill regularization
 ki = 50             # Value of k for the first iteration
 N = 400
 maxki = 200          # Value of k for the last iteration
@@ -77,8 +74,38 @@ while ki &lt; maxki
     local print_level = (ki == maxki) # Only print the output on the last iteration
     global k = ki
     global sol = solve(ocp; grid_size=N, init=sol, print_level=4*print_level)
-end
-nothing # hide</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Total number of variables............................:     1605
+                     variables with only lower bounds:        1
+                variables with lower and upper bounds:      401
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:     1204
+Total number of inequality constraints...............:        1
+        inequality constraints with only lower bounds:        0
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:        1
+
+
+Number of Iterations....: 125
+
+                                   (scaled)                 (unscaled)
+Objective...............:   9.1859152451316783e-01    9.1859152451316783e-01
+Dual infeasibility......:   2.1150604323505462e-09    2.1150604323505462e-09
+Constraint violation....:   1.4616086119190186e-12    1.4616086119190186e-12
+Variable bound violation:   1.1363998408953080e-08    1.1363998408953080e-08
+Complementarity.........:   3.2054420957186735e-11    3.2054420957186735e-11
+Overall NLP error.......:   2.1150604323505462e-09    2.1150604323505462e-09
+
+
+Number of objective function evaluations             = 128
+Number of objective gradient evaluations             = 126
+Number of equality constraint evaluations            = 128
+Number of inequality constraint evaluations          = 128
+Number of equality constraint Jacobian evaluations   = 126
+Number of inequality constraint Jacobian evaluations = 126
+Number of Lagrangian Hessian evaluations             = 125
+Total seconds in IPOPT                               = 1.506
+
+EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
 tf    = variable(sol)
@@ -95,7 +122,7 @@ scatter!(plt1, [x₀[1]], [x₀[2]], label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-33ff18fd.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 50             # Value of k for the first iteration
 N = 400
 maxki = 300          # Value of k for the last iteration
@@ -104,8 +131,38 @@ while ki &lt; maxki
     local print_level = (ki == maxki) # Only print the output on the last iteration
     global k = ki
     global sol = solve(ocp; grid_size=N, init=sol, print_level=4*print_level)
-end
-nothing # hide</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Total number of variables............................:     1605
+                     variables with only lower bounds:        1
+                variables with lower and upper bounds:      401
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:     1204
+Total number of inequality constraints...............:        1
+        inequality constraints with only lower bounds:        0
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:        1
+
+
+Number of Iterations....: 210
+
+                                   (scaled)                 (unscaled)
+Objective...............:   9.1716616757368463e-01    9.1716616757368463e-01
+Dual infeasibility......:   2.0876766353833186e-12    2.0876766353833186e-12
+Constraint violation....:   2.7755575615628914e-15    2.7755575615628914e-15
+Variable bound violation:   1.1408656019895602e-08    1.1408656019895602e-08
+Complementarity.........:   1.0000000629946670e-11    1.0000000629946670e-11
+Overall NLP error.......:   1.0000000629946670e-11    1.0000000629946670e-11
+
+
+Number of objective function evaluations             = 232
+Number of objective gradient evaluations             = 211
+Number of equality constraint evaluations            = 232
+Number of inequality constraint evaluations          = 232
+Number of equality constraint Jacobian evaluations   = 211
+Number of inequality constraint Jacobian evaluations = 211
+Number of Lagrangian Hessian evaluations             = 210
+Total seconds in IPOPT                               = 2.360
+
+EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
 tf    = variable(sol)
@@ -122,4 +179,4 @@ scatter!(plt1, [x₀[1]], [x₀[2]], label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&lt;&lt; @example-block not executed in draft mode &gt;&gt;</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Thursday 19 June 2025 12:55">Thursday 19 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-b062dcd1.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Thursday 19 June 2025 13:07">Thursday 19 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
