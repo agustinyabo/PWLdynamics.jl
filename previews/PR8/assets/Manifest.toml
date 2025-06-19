@@ -928,7 +928,7 @@ version = "10.42.0+1"
 [[deps.PWLdynamics]]
 path = "/home/runner/work/PWLdynamics.jl/PWLdynamics.jl"
 uuid = "3a975481-f65e-4f93-b353-981d00172cb9"
-version = "0.2.1"
+version = "0.3.0"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
