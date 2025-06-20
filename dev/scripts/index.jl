@@ -7,7 +7,6 @@ y2 = x.^k ./ (x.^k .+ θ^k)
 y3 = 1 .- 1 ./ (1 .+ exp.(k*(x.-θ)))
 plot(x, [y1, y2, y3], label=["s⁺" "Hill" "Exponential"], xlabel="x")
 
-using Plots
 k = 5
 u = range(0, 2, length=100)
 y1 = abs.(u .- 1)
