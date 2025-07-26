@@ -46,20 +46,20 @@
 using Plots
 θ = 2
 k = 10
-x = range(0, 4, length=100)
+x = range(0, 4; length=100)
 y1 = (x .> θ)
-y2 = x.^k ./ (x.^k .+ θ^k)
-y3 = 1 .- 1 ./ (1 .+ exp.(k*(x.-θ)))
-plot(x, [y1, y2, y3], label=["s⁺" "Hill" "Exponential"], xlabel="x")
+y2 = x .^ k ./ (x .^ k .+ θ^k)
+y3 = 1 .- 1 ./ (1 .+ exp.(k*(x .- θ)))
+plot(x, [y1, y2, y3]; label=["s⁺" "Hill" "Exponential"], xlabel="x")
 
 # and for $|u-1|$:
 
 k = 5
-u = range(0, 2, length=100)
+u = range(0, 2; length=100)
 y1 = abs.(u .- 1)
-y2 = (u .- 1).*(u.^k .- 1)./(u.^k .+ 1)
-y3 = (u .- 1).*(1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
-plot(u, [y1, y2, y3], label=["|u-1|" "Hill" "Exponential"], xlabel="u")
+y2 = (u .- 1) .* (u .^ k .- 1) ./ (u .^ k .+ 1)
+y3 = (u .- 1) .* (1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
+plot(u, [y1, y2, y3]; label=["|u-1|" "Hill" "Exponential"], xlabel="u")
 
 # [^1]: Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. [https://hal.science/hal-04820387](https://hal.science/hal-04820387).
 
