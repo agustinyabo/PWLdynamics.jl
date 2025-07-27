@@ -9,16 +9,16 @@
         \end{array} \right.\]</p><p>where <span>$s^-$</span> models an inhibiting effect, <span>$s^+$</span> a catalyzing effect, and <span>$\theta$</span> represents in both cases a threshold for transcriptional repression or activation, respectively.</p><p>In order to solve this numerical OCP, there are two difficulties:</p><ul><li>The hybrid nature of the dynamics.</li><li>The non-smoothness of the <span>$L^1$</span> Lagrangian cost.</li></ul><p>The latter can be tackled through a regularization scheme to be detailed in next section.</p><h2 id="Regularization-strategies"><a class="docs-heading-anchor" href="#Regularization-strategies">Regularization strategies</a><a id="Regularization-strategies-1"></a><a class="docs-heading-anchor-permalink" href="#Regularization-strategies" title="Permalink"></a></h2><p>Two regularization strategies are compared: through Hill functions, and through exponential functions, both depending on a parameter <span>$k \in \mathbb{N}$</span>. Each case is detailed in the following table.</p><table><tr><th style="text-align: center">Function</th><th style="text-align: center">Hill</th><th style="text-align: center">Exponential</th></tr><tr><td style="text-align: center"><span>$s^+(x, \theta)$</span></td><td style="text-align: center"><span>$\frac{x^k}{x^k + \theta^k}$</span></td><td style="text-align: center"><span>$1 - \frac{1}{1 + e^{k(x-\theta)}}$</span></td></tr><tr><td style="text-align: center"><span>$\mid u-1 \mid$</span></td><td style="text-align: center"><span>$(u-1) \frac{u^k - 1}{u^k + 1}$</span></td><td style="text-align: center"><span>$(u-1) \left[ 1 - \frac{2}{1 + e^{k(u-1)}} \right]$</span></td></tr></table><p>A comparison for low values of <span>$k$</span>, for <span>$s^+(x, \theta)$</span>:</p><pre><code class="language-julia hljs">using Plots
 θ = 2
 k = 10
-x = range(0, 4, length=100)
+x = range(0, 4; length=100)
 y1 = (x .&gt; θ)
-y2 = x.^k ./ (x.^k .+ θ^k)
-y3 = 1 .- 1 ./ (1 .+ exp.(k*(x.-θ)))
-plot(x, [y1, y2, y3], label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-13e96c94.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">k = 5
-u = range(0, 2, length=100)
+y2 = x .^ k ./ (x .^ k .+ θ^k)
+y3 = 1 .- 1 ./ (1 .+ exp.(k*(x .- θ)))
+plot(x, [y1, y2, y3]; label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-c2076c8d.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">k = 5
+u = range(0, 2; length=100)
 y1 = abs.(u .- 1)
-y2 = (u .- 1).*(u.^k .- 1)./(u.^k .+ 1)
-y3 = (u .- 1).*(1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
-plot(u, [y1, y2, y3], label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-e923dd51.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/PWLdynamics.jl/PWLdynamics.jl/docs/Project.toml`
+y2 = (u .- 1) .* (u .^ k .- 1) ./ (u .^ k .+ 1)
+y3 = (u .- 1) .* (1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
+plot(u, [y1, y2, y3]; label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-21ffebb7.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/PWLdynamics.jl/PWLdynamics.jl/docs/Project.toml`
   [e30172f5] Documenter v1.14.1
   [98b081ad] Literate v2.20.1
   [f4238b75] NLPModelsIpopt v0.10.4
@@ -71,7 +71,7 @@ Environment:
   [e30172f5] Documenter v1.14.1
   [460bff9d] ExceptionUnwrapping v0.1.11
   [e2ba6199] ExprTools v0.1.10
-  [c87230d0] FFMPEG v0.4.2
+  [c87230d0] FFMPEG v0.4.4
   [9aa1b823] FastClosures v0.3.2
   [1a297f60] FillArrays v1.13.0
   [53c48c17] FixedPointNumbers v0.8.5
@@ -164,7 +164,7 @@ Environment:
   [ee1fde0b] Dbus_jll v1.16.2+0
   [2702e6a9] EpollShim_jll v0.0.20230411+1
   [2e619515] Expat_jll v2.6.5+0
-⌅ [b22a6f82] FFMPEG_jll v4.4.4+1
+  [b22a6f82] FFMPEG_jll v7.1.1+0
   [a3f928ae] Fontconfig_jll v2.16.0+0
   [d7e528f0] FreeType2_jll v2.13.4+0
   [559328eb] FriBidi_jll v1.0.17+0
@@ -236,7 +236,7 @@ Environment:
   [35ca27e7] eudev_jll v3.2.14+0
   [214eeab7] fzf_jll v0.61.1+0
   [a4ae2306] libaom_jll v3.12.1+0
-⌅ [0ac62f75] libass_jll v0.15.2+0
+  [0ac62f75] libass_jll v0.17.4+0
   [1183f4f0] libdecor_jll v0.2.2+0
   [2db6ffa8] libevdev_jll v1.13.4+0
   [f638f0a6] libfdk_aac_jll v2.0.4+0
@@ -245,8 +245,8 @@ Environment:
   [f27f6e37] libvorbis_jll v1.3.8+0
   [009596ad] mtdev_jll v1.1.7+0
   [1317d2d5] oneTBB_jll v2022.0.0+0
-⌅ [1270edf5] x264_jll v2021.5.5+0
-⌅ [dfaa095f] x265_jll v3.5.0+0
+  [1270edf5] x264_jll v10164.0.1+0
+  [dfaa095f] x265_jll v4.1.0+0
   [d8fb68d0] xkbcommon_jll v1.9.2+0
   [0dad84c5] ArgTools v1.1.2
   [56f22d72] Artifacts v1.11.0
@@ -294,4 +294,4 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.11.0+0
   [8e850ede] nghttp2_jll v1.59.0+0
   [3f19e933] p7zip_jll v17.4.0+2
-Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><p>You can also download the <a href="https://github.com/agustinyabo/PWLdynamics.jl/tree/gh-pages/v0.3.3/assets/Manifest.toml">manifest</a> file and the <a href="https://github.com/agustinyabo/PWLdynamics.jl/tree/gh-pages/v0.3.3/assets/Project.toml">project</a> file.</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. <a href="https://hal.science/hal-04820387">https://hal.science/hal-04820387</a>.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="bistable.html">Bistable toggle switch »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 25 July 2025 21:26">Friday 25 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><p>You can also download the <a href="https://github.com/agustinyabo/PWLdynamics.jl/tree/gh-pages/v0.3.3/assets/Manifest.toml">manifest</a> file and the <a href="https://github.com/agustinyabo/PWLdynamics.jl/tree/gh-pages/v0.3.3/assets/Project.toml">project</a> file.</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. <a href="https://hal.science/hal-04820387">https://hal.science/hal-04820387</a>.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="bistable.html">Bistable toggle switch »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Sunday 27 July 2025 12:22">Sunday 27 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

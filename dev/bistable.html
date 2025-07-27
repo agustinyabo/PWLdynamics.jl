@@ -32,26 +32,29 @@ function abs_m1(u, regMethod)
     end
     return out*(u - 1)
 end</code></pre><p>Definition of the OCP:</p><pre><code class="language-julia hljs"># Constant definition
-k₁    = 1;    k₂    = 1     # Production rates
-γ₁    = 1.4;  γ₂    = 1.6   # Degradation rates
-θ₁    = 0.6;  θ₂    = 0.4   # Transcriptional thresholds
-uₘᵢₙ  = 0.6;  uₘₐₓ  = 1.4   # Control bounds
-x₀    = [0.65, 0.2]         # Initial point
-x₂ᶠ   = 0.55                # Final point
-λ     = 0.25                # Trade-off fuel/time
+k₁ = 1;
+k₂ = 1     # Production rates
+γ₁ = 1.4;
+γ₂ = 1.6   # Degradation rates
+θ₁ = 0.6;
+θ₂ = 0.4   # Transcriptional thresholds
+uₘᵢₙ = 0.6;
+uₘₐₓ = 1.4   # Control bounds
+x₀ = [0.65, 0.2]         # Initial point
+x₂ᶠ = 0.55                # Final point
+λ = 0.25                # Trade-off fuel/time
 
 # Initial guest for the NLP
-tf    = 1.5
-u(t)  = 0
+tf = 1.5
+u(t) = 0
 sol = (control=u, variable=tf)
 
 # Optimal control problem definition
 ocp = @def begin
-
-    tf ∈ R,                variable
-    t ∈ [ 0, tf ],         time
-    x = ( x₁, x₂ ) ∈ R²,   state
-    u ∈ R,                 control
+    tf ∈ R, variable
+    t ∈ [0, tf], time
+    x = (x₁, x₂) ∈ R², state
+    u ∈ R, control
 
     x(0) == x₀
     x₁(tf) ≤ θ₁
@@ -60,11 +63,12 @@ ocp = @def begin
     uₘᵢₙ ≤ u(t) ≤ uₘₐₓ
     tf ≥ 0
 
-    ẋ(t) == [ - γ₁*x₁(t) + k₁*u(t)*(1 - s⁺(x₂(t),θ₂,regMethod))  ,
-              - γ₂*x₂(t) + k₂*u(t)*(1 - s⁺(x₁(t),θ₁,regMethod)) ]
+    ẋ(t) == [
+        - γ₁*x₁(t) + k₁*u(t)*(1 - s⁺(x₂(t), θ₂, regMethod)),
+        - γ₂*x₂(t) + k₂*u(t)*(1 - s⁺(x₁(t), θ₁, regMethod)),
+    ]
 
-    ∫(λ*abs_m1(u(t),regMethod) + 1-λ) → min
-
+    ∫(λ*abs_m1(u(t), regMethod) + 1-λ) → min
 end</code></pre><h2 id="Resolution-through-Hill-regularization"><a class="docs-heading-anchor" href="#Resolution-through-Hill-regularization">Resolution through Hill regularization</a><a id="Resolution-through-Hill-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-Hill-regularization" title="Permalink"></a></h2><p>In order to ensure convergence of the solver, we solve the OCP by iteratively increasing the parameter <span>$k$</span> while using the <span>$i-1$</span>-th solution as the initialization of the <span>$i$</span>-th iteration.</p><pre><code class="language-julia hljs">regMethod = 1       # Hill regularization
 ki = 50             # Value of k for the first iteration
 N = 400
@@ -103,26 +107,35 @@ Number of inequality constraint evaluations          = 215
 Number of equality constraint Jacobian evaluations   = 200
 Number of inequality constraint Jacobian evaluations = 200
 Number of Lagrangian Hessian evaluations             = 199
-Total seconds in IPOPT                               = 2.276
+Total seconds in IPOPT                               = 2.891
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = variable(sol)
+tf = variable(sol)
 tspan = range(0, tf, N)   # time interval
 x₁(t) = state(sol)(t)[1]
 x₂(t) = state(sol)(t)[2]
-u(t)  = control(sol)(t)
+u(t) = control(sol)(t)
 
 xticks = ([0, θ₁], [&quot;0&quot;, &quot;θ₁&quot;])
 yticks = ([0, θ₂, x₂ᶠ], [&quot;0&quot;, &quot;θ₂&quot;, &quot;x₂ᶠ&quot;])
 
-plot!(plt1, x₁.(tspan), x₂.(tspan), label=&quot;optimal trajectory&quot;, xlabel=&quot;x₁&quot;, ylabel=&quot;x₂&quot;, xlimits=(θ₁/3, k₁/γ₁), ylimits=(0, k₂/γ₂))
-scatter!(plt1, [x₀[1]], [x₀[2]], label=&quot;x₀&quot;, color=:deepskyblue)
+plot!(
+    plt1,
+    x₁.(tspan),
+    x₂.(tspan);
+    label=&quot;optimal trajectory&quot;,
+    xlabel=&quot;x₁&quot;,
+    ylabel=&quot;x₂&quot;,
+    xlimits=(θ₁/3, k₁/γ₁),
+    ylimits=(0, k₂/γ₂),
+)
+scatter!(plt1, [x₀[1]], [x₀[2]]; label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
-plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-cb5a225e.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="bistable-55bfa709.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 50             # Value of k for the first iteration
 N = 400
 maxki = 300          # Value of k for the last iteration
@@ -160,23 +173,32 @@ Number of inequality constraint evaluations          = 210
 Number of equality constraint Jacobian evaluations   = 201
 Number of inequality constraint Jacobian evaluations = 201
 Number of Lagrangian Hessian evaluations             = 200
-Total seconds in IPOPT                               = 2.131
+Total seconds in IPOPT                               = 3.018
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = variable(sol)
+tf = variable(sol)
 tspan = range(0, tf, N)   # time interval
 x₁(t) = state(sol)(t)[1]
 x₂(t) = state(sol)(t)[2]
-u(t)  = control(sol)(t)
+u(t) = control(sol)(t)
 
 xticks = ([0, θ₁], [&quot;0&quot;, &quot;θ₁&quot;])
 yticks = ([0, θ₂, x₂ᶠ], [&quot;0&quot;, &quot;θ₂&quot;, &quot;x₂ᶠ&quot;])
 
-plot!(plt1, x₁.(tspan), x₂.(tspan), label=&quot;optimal trajectory&quot;, xlabel=&quot;x₁&quot;, ylabel=&quot;x₂&quot;, xlimits=(θ₁/3, k₁/γ₁), ylimits=(0, k₂/γ₂))
-scatter!(plt1, [x₀[1]], [x₀[2]], label=&quot;x₀&quot;, color=:deepskyblue)
+plot!(
+    plt1,
+    x₁.(tspan),
+    x₂.(tspan);
+    label=&quot;optimal trajectory&quot;,
+    xlabel=&quot;x₁&quot;,
+    ylabel=&quot;x₂&quot;,
+    xlimits=(θ₁/3, k₁/γ₁),
+    ylimits=(0, k₂/γ₂),
+)
+scatter!(plt1, [x₀[1]], [x₀[2]]; label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
-plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="bistable-f73a7df6.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 25 July 2025 21:26">Friday 25 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="bistable-4b1f633a.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Sunday 27 July 2025 12:22">Sunday 27 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

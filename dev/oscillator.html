@@ -24,25 +24,28 @@ function abs_m1(u, regMethod)
     end
     return out*(u - 1)
 end</code></pre><p>Definition of the OCP:</p><pre><code class="language-julia hljs"># Constant definition
-k₁    = 2;    k₂    = 3     # Production rates
-γ₁    = 0.2;  γ₂    = 0.3   # Degradation rates
-θ₁    = 4;    θ₂    = 3     # Transcriptional thresholds
-uₘᵢₙ  = 0.6;  uₘₐₓ  = 1.4   # Control bounds
-x₁ᶜ   = 4.7                 # Cycle point (initial and final)
-λ     = 0.5                 # Trade-off fuel/time
+k₁ = 2;
+k₂ = 3     # Production rates
+γ₁ = 0.2;
+γ₂ = 0.3   # Degradation rates
+θ₁ = 4;
+θ₂ = 3     # Transcriptional thresholds
+uₘᵢₙ = 0.6;
+uₘₐₓ = 1.4   # Control bounds
+x₁ᶜ = 4.7                 # Cycle point (initial and final)
+λ = 0.5                 # Trade-off fuel/time
 
 # Initial guest for the NLP
-tf    = 1
-u(t)  = 1
+tf = 1
+u(t) = 1
 sol = (control=u, variable=tf)
 
 # Optimal control problem definition
 ocp = @def begin
-
-    tf ∈ R,                variable
-    t ∈ [ 0, tf ],         time
-    x = ( x₁, x₂ ) ∈ R²,   state
-    u ∈ R,                 control
+    tf ∈ R, variable
+    t ∈ [0, tf], time
+    x = (x₁, x₂) ∈ R², state
+    u ∈ R, control
 
     x₁(0) == x₁ᶜ
     x₂(0) == θ₂
@@ -52,11 +55,12 @@ ocp = @def begin
     uₘᵢₙ ≤ u(t) ≤ uₘₐₓ
     tf ≥ 1 # Force the state out of the confort zone
 
-    ẋ(t) == [ - γ₁*x₁(t) + k₁*u(t)*(1 - s⁺(x₂(t),θ₂,regMethod))  ,
-              - γ₂*x₂(t) + k₂*s⁺(x₁(t),θ₁,regMethod) ]
+    ẋ(t) == [
+        - γ₁*x₁(t) + k₁*u(t)*(1 - s⁺(x₂(t), θ₂, regMethod)),
+        - γ₂*x₂(t) + k₂*s⁺(x₁(t), θ₁, regMethod),
+    ]
 
-    ∫(λ*abs_m1(u(t),regMethod) + 1-λ) → min
-
+    ∫(λ*abs_m1(u(t), regMethod) + 1-λ) → min
 end</code></pre><h2 id="Resolution-through-Hill-regularization"><a class="docs-heading-anchor" href="#Resolution-through-Hill-regularization">Resolution through Hill regularization</a><a id="Resolution-through-Hill-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-Hill-regularization" title="Permalink"></a></h2><p>In order to ensure convergence of the solver, we solve the OCP by iteratively increasing the parameter <span>$k$</span> while using the <span>$i-1$</span>-th solution as the initialization of the <span>$i$</span>-th iteration.</p><pre><code class="language-julia hljs">regMethod = 1       # Hill regularization
 ki = 10             # Value of k for the first iteration
 N = 400
@@ -95,25 +99,34 @@ Number of inequality constraint evaluations          = 0
 Number of equality constraint Jacobian evaluations   = 51
 Number of inequality constraint Jacobian evaluations = 0
 Number of Lagrangian Hessian evaluations             = 50
-Total seconds in IPOPT                               = 0.543
+Total seconds in IPOPT                               = 0.545
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = variable(sol)
+tf = variable(sol)
 tspan = range(0, tf, N)   # time interval
 x₁(t) = state(sol)(t)[1]
 x₂(t) = state(sol)(t)[2]
-u(t)  = control(sol)(t)
+u(t) = control(sol)(t)
 
 xticks = ([0, θ₁, x₁ᶜ], [&quot;0&quot;, &quot;θ₁&quot;, &quot;x₁ᶜ&quot;])
 yticks = ([0, θ₂], [&quot;0&quot;, &quot;θ₂&quot;])
 
-plot!(plt1, x₁.(tspan), x₂.(tspan), label=&quot;optimal trajectory&quot;, xlabel=&quot;x₁&quot;, ylabel=&quot;x₂&quot;, xlimits=(θ₁/1.5, 1.1*x₁ᶜ), ylimits=(θ₂/2, 1.75*θ₂))
+plot!(
+    plt1,
+    x₁.(tspan),
+    x₂.(tspan);
+    label=&quot;optimal trajectory&quot;,
+    xlabel=&quot;x₁&quot;,
+    ylabel=&quot;x₂&quot;,
+    xlimits=(θ₁/1.5, 1.1*x₁ᶜ),
+    ylimits=(θ₂/2, 1.75*θ₂),
+)
 xticks!(xticks)
 yticks!(yticks)
-plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="oscillator-06aa37ed.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="oscillator-30c68eaf.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 100             # Value of k for the first iteration
 N = 400
 maxki = 400          # Value of k for the last iteration
@@ -151,22 +164,31 @@ Number of inequality constraint evaluations          = 0
 Number of equality constraint Jacobian evaluations   = 117
 Number of inequality constraint Jacobian evaluations = 0
 Number of Lagrangian Hessian evaluations             = 116
-Total seconds in IPOPT                               = 1.497
+Total seconds in IPOPT                               = 1.474
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
 
-tf    = variable(sol)
+tf = variable(sol)
 tspan = range(0, tf, N)   # time interval
 x₁(t) = state(sol)(t)[1]
 x₂(t) = state(sol)(t)[2]
-u(t)  = control(sol)(t)
+u(t) = control(sol)(t)
 
 xticks = ([0, θ₁, x₁ᶜ], [&quot;0&quot;, &quot;θ₁&quot;, &quot;x₁ᶜ&quot;])
 yticks = ([0, θ₂], [&quot;0&quot;, &quot;θ₂&quot;])
 
-plot!(plt1, x₁.(tspan), x₂.(tspan), label=&quot;optimal trajectory&quot;, xlabel=&quot;x₁&quot;, ylabel=&quot;x₂&quot;, xlimits=(θ₁/1.5, 1.1*x₁ᶜ), ylimits=(θ₂/2, 1.75*θ₂))
+plot!(
+    plt1,
+    x₁.(tspan),
+    x₂.(tspan);
+    label=&quot;optimal trajectory&quot;,
+    xlabel=&quot;x₁&quot;,
+    ylabel=&quot;x₂&quot;,
+    xlimits=(θ₁/1.5, 1.1*x₁ᶜ),
+    ylimits=(θ₂/2, 1.75*θ₂),
+)
 xticks!(xticks)
 yticks!(yticks)
-plot!(plt2, tspan, u, label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1,2), size=(800,300))</code></pre><img src="oscillator-a1089e04.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>E. Farcot, J.-L. Gouzé, Periodic solutions of piecewise affine gene network models with non uniform decay rates: the case of a negative feedback loop, Acta biotheoretica 57 (4) (2009) 429–455. –&gt;</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="bistable.html">« Bistable toggle switch</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 25 July 2025 21:26">Friday 25 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="oscillator-7665d638.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>E. Farcot, J.-L. Gouzé, Periodic solutions of piecewise affine gene network models with non uniform decay rates: the case of a negative feedback loop, Acta biotheoretica 57 (4) (2009) 429–455. –&gt;</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="bistable.html">« Bistable toggle switch</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Sunday 27 July 2025 12:22">Sunday 27 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
