@@ -70,7 +70,25 @@ while ki &lt; maxki
     local print_level = (ki == maxki) # Only print the output on the last iteration
     global k = ki
     global sol = solve(ocp; grid_size=N, init=sol, print_level=4*print_level)
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Total number of variables............................:     1605
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.16.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: trapeze
+
+▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.16.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: trapeze
+
+Total number of variables............................:     1605
                      variables with only lower bounds:        1
                 variables with lower and upper bounds:      401
                      variables with only upper bounds:        0
@@ -99,7 +117,7 @@ Number of inequality constraint evaluations          = 0
 Number of equality constraint Jacobian evaluations   = 51
 Number of inequality constraint Jacobian evaluations = 0
 Number of Lagrangian Hessian evaluations             = 50
-Total seconds in IPOPT                               = 0.554
+Total seconds in IPOPT                               = 0.572
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
@@ -126,7 +144,7 @@ plot!(
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="oscillator-b2daeab0.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="oscillator-f146fb4d.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 100             # Value of k for the first iteration
 N = 400
 maxki = 400          # Value of k for the last iteration
@@ -135,7 +153,34 @@ while ki &lt; maxki
     local print_level = (ki == maxki) # Only print the output on the last iteration
     global k = ki
     global sol = solve(ocp; grid_size=N, init=sol, print_level=4*print_level)
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Total number of variables............................:     1605
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.16.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: trapeze
+
+▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.16.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: trapeze
+
+▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.16.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: trapeze
+
+Total number of variables............................:     1605
                      variables with only lower bounds:        1
                 variables with lower and upper bounds:      401
                      variables with only upper bounds:        0
@@ -164,7 +209,7 @@ Number of inequality constraint evaluations          = 0
 Number of equality constraint Jacobian evaluations   = 117
 Number of inequality constraint Jacobian evaluations = 0
 Number of Lagrangian Hessian evaluations             = 116
-Total seconds in IPOPT                               = 1.421
+Total seconds in IPOPT                               = 1.697
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
@@ -191,4 +236,4 @@ plot!(
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="oscillator-fcbfa379.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>E. Farcot, J.-L. Gouzé, Periodic solutions of piecewise affine gene network models with non uniform decay rates: the case of a negative feedback loop, Acta biotheoretica 57 (4) (2009) 429–455. –&gt;</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="bistable.html">« Bistable toggle switch</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Sunday 27 July 2025 12:29">Sunday 27 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="oscillator-de99431e.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>E. Farcot, J.-L. Gouzé, Periodic solutions of piecewise affine gene network models with non uniform decay rates: the case of a negative feedback loop, Acta biotheoretica 57 (4) (2009) 429–455. –&gt;</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="bistable.html">« Bistable toggle switch</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Thursday 7 August 2025 19:41">Thursday 7 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
