@@ -7,8 +7,8 @@ PWLdynamics = "3a975481-f65e-4f93-b353-981d00172cb9"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 
 [compat]
-Documenter = "1.10"
+Documenter = "1"
 Literate = "2"
 NLPModelsIpopt = "0.10"
-OptimalControl = "1.1"
-Plots = "1.40"
+OptimalControl = "1"
+Plots = "1"
