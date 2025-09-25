@@ -78,63 +78,63 @@ while ki &lt; maxki
     local print_level = (ki == maxki) # Only print the output on the last iteration
     global k = ki
     global sol = solve(ocp; grid_size=N, init=sol, print_level=4*print_level)
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
 
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
-
-   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
-   │
-   ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
-
-▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
-
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
 
    ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
    │
    ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
+   └─ Discretisation scheme: midpoint
 
-▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
 
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
 
    ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
    │
    ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
+   └─ Discretisation scheme: midpoint
 
-Total number of variables............................:     1605
+▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: midpoint
+
+Total number of variables............................:     1203
                      variables with only lower bounds:        1
-                variables with lower and upper bounds:      401
+                variables with lower and upper bounds:      400
                      variables with only upper bounds:        0
-Total number of equality constraints.................:     1204
+Total number of equality constraints.................:      803
 Total number of inequality constraints...............:        1
         inequality constraints with only lower bounds:        0
    inequality constraints with lower and upper bounds:        0
         inequality constraints with only upper bounds:        1
 
 
-Number of Iterations....: 199
+Number of Iterations....: 120
 
                                    (scaled)                 (unscaled)
-Objective...............:   9.1859086535922252e-01    9.1859086535922252e-01
-Dual infeasibility......:   2.8330397637971917e-12    2.8330397637971917e-12
-Constraint violation....:   5.2735593669694936e-15    5.2735593669694936e-15
-Variable bound violation:   1.1365586916056714e-08    1.1365586916056714e-08
-Complementarity.........:   1.0000000490263423e-11    1.0000000490263423e-11
-Overall NLP error.......:   1.0000000490263423e-11    1.0000000490263423e-11
+Objective...............:   9.1858302648583279e-01    9.1858302648583279e-01
+Dual infeasibility......:   7.9602990865623724e-13    7.9602990865623724e-13
+Constraint violation....:   1.1768364061026659e-13    1.1768364061026659e-13
+Variable bound violation:   1.1424962531592087e-08    1.1424962531592087e-08
+Complementarity.........:   1.0605240368545973e-11    1.0605240368545973e-11
+Overall NLP error.......:   1.0605240368545973e-11    1.0605240368545973e-11
 
 
-Number of objective function evaluations             = 215
-Number of objective gradient evaluations             = 200
-Number of equality constraint evaluations            = 215
-Number of inequality constraint evaluations          = 215
-Number of equality constraint Jacobian evaluations   = 200
-Number of inequality constraint Jacobian evaluations = 200
-Number of Lagrangian Hessian evaluations             = 199
-Total seconds in IPOPT                               = 2.337
+Number of objective function evaluations             = 162
+Number of objective gradient evaluations             = 121
+Number of equality constraint evaluations            = 162
+Number of inequality constraint evaluations          = 162
+Number of equality constraint Jacobian evaluations   = 121
+Number of inequality constraint Jacobian evaluations = 121
+Number of Lagrangian Hessian evaluations             = 120
+Total seconds in IPOPT                               = 1.451
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
@@ -162,7 +162,7 @@ scatter!(plt1, [x₀[1]], [x₀[2]]; label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="bistable-51063eae.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="bistable-a9754ea4.svg" alt="Example block output"/><h2 id="Resolution-through-exponential-regularization"><a class="docs-heading-anchor" href="#Resolution-through-exponential-regularization">Resolution through exponential regularization</a><a id="Resolution-through-exponential-regularization-1"></a><a class="docs-heading-anchor-permalink" href="#Resolution-through-exponential-regularization" title="Permalink"></a></h2><p>The same procedure for iteratively increasing <span>$k$</span> is used.</p><pre><code class="language-julia hljs">regMethod = 2       # Exponential regularization
 ki = 50             # Value of k for the first iteration
 N = 400
 maxki = 300          # Value of k for the last iteration
@@ -171,81 +171,81 @@ while ki &lt; maxki
     local print_level = (ki == maxki) # Only print the output on the last iteration
     global k = ki
     global sol = solve(ocp; grid_size=N, init=sol, print_level=4*print_level)
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
 
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
-
-   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
-   │
-   ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
-
-▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
-
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
 
    ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
    │
    ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
+   └─ Discretisation scheme: midpoint
 
-▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
 
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
-
-   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
-   │
-   ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
-
-▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
-
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
 
    ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
    │
    ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
+   └─ Discretisation scheme: midpoint
 
-▫ This is OptimalControl version v1.1.1 running with: direct, adnlp, ipopt.
+▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
 
-▫ The optimal control problem is solved with CTDirect version v0.16.3.
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
 
    ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
    │
    ├─ Number of time steps⋅: 400
-   └─ Discretisation scheme: trapeze
+   └─ Discretisation scheme: midpoint
 
-Total number of variables............................:     1605
+▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: midpoint
+
+▫ This is OptimalControl version v1.1.2 running with: direct, adnlp, ipopt.
+
+▫ The optimal control problem is solved with CTDirect version v0.17.2.
+
+   ┌─ The NLP is modelled with ADNLPModels and solved with NLPModelsIpopt.
+   │
+   ├─ Number of time steps⋅: 400
+   └─ Discretisation scheme: midpoint
+
+Total number of variables............................:     1203
                      variables with only lower bounds:        1
-                variables with lower and upper bounds:      401
+                variables with lower and upper bounds:      400
                      variables with only upper bounds:        0
-Total number of equality constraints.................:     1204
+Total number of equality constraints.................:      803
 Total number of inequality constraints...............:        1
         inequality constraints with only lower bounds:        0
    inequality constraints with lower and upper bounds:        0
         inequality constraints with only upper bounds:        1
 
 
-Number of Iterations....: 200
+Number of Iterations....: 64
 
                                    (scaled)                 (unscaled)
-Objective...............:   9.1716656538135588e-01    9.1716656538135588e-01
-Dual infeasibility......:   1.9231944891600961e-10    1.9231944891600961e-10
-Constraint violation....:   2.3586688158161451e-13    2.3586688158161451e-13
-Variable bound violation:   1.1406815048076169e-08    1.1406815048076169e-08
-Complementarity.........:   1.0000000602535572e-11    1.0000000602535572e-11
-Overall NLP error.......:   1.9231944891600961e-10    1.9231944891600961e-10
+Objective...............:   9.1717241402632110e-01    9.1717241402632110e-01
+Dual infeasibility......:   7.0892061138837439e-12    7.0892061138837439e-12
+Constraint violation....:   2.2204460492503131e-16    2.2204460492503131e-16
+Variable bound violation:   1.1379212683237938e-08    1.1379212683237938e-08
+Complementarity.........:   1.0000000587850717e-11    1.0000000587850717e-11
+Overall NLP error.......:   1.0000000587850717e-11    1.0000000587850717e-11
 
 
-Number of objective function evaluations             = 210
-Number of objective gradient evaluations             = 201
-Number of equality constraint evaluations            = 210
-Number of inequality constraint evaluations          = 210
-Number of equality constraint Jacobian evaluations   = 201
-Number of inequality constraint Jacobian evaluations = 201
-Number of Lagrangian Hessian evaluations             = 200
-Total seconds in IPOPT                               = 2.353
+Number of objective function evaluations             = 79
+Number of objective gradient evaluations             = 65
+Number of equality constraint evaluations            = 79
+Number of inequality constraint evaluations          = 79
+Number of equality constraint Jacobian evaluations   = 65
+Number of inequality constraint Jacobian evaluations = 65
+Number of Lagrangian Hessian evaluations             = 64
+Total seconds in IPOPT                               = 0.958
 
 EXIT: Optimal Solution Found.</code></pre><p>Plotting of the results:</p><pre><code class="language-julia hljs">plt1 = plot()
 plt2 = plot()
@@ -273,4 +273,4 @@ scatter!(plt1, [x₀[1]], [x₀[2]]; label=&quot;x₀&quot;, color=:deepskyblue)
 xticks!(xticks)
 yticks!(yticks)
 plot!(plt2, tspan, u; label=&quot;optimal control&quot;, xlabel=&quot;t&quot;)
-plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="bistable-e6c33bd4.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Wednesday 27 August 2025 11:22">Wednesday 27 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot(plt1, plt2; layout=(1, 2), size=(800, 300))</code></pre><img src="bistable-aae2b066.svg" alt="Example block output"/><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="oscillator.html">Damped genetic oscillator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Thursday 25 September 2025 08:22">Thursday 25 September 2025</span>. Using Julia version 1.11.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
