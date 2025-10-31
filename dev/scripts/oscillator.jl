@@ -55,7 +55,7 @@ ocp = @def begin
     x₂(tf) == θ₂
 
     uₘᵢₙ ≤ u(t) ≤ uₘₐₓ
-    tf ≥ 1 # Force the state out of the confort zone
+    tf ≥ 1 # Force the state out of the comfort zone
 
     ẋ(t) == [
         - γ₁*x₁(t) + k₁*u(t)*(1 - s⁺(x₂(t), θ₂, regMethod)),
