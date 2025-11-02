@@ -13,12 +13,12 @@ x = range(0, 4; length=100)
 y1 = (x .&gt; θ)
 y2 = x .^ k ./ (x .^ k .+ θ^k)
 y3 = 1 .- 1 ./ (1 .+ exp.(k*(x .- θ)))
-plot(x, [y1, y2, y3]; label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-5cabd5a2.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">k = 5
+plot(x, [y1, y2, y3]; label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-31bf4d21.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">k = 5
 u = range(0, 2; length=100)
 y1 = abs.(u .- 1)
 y2 = (u .- 1) .* (u .^ k .- 1) ./ (u .^ k .+ 1)
 y3 = (u .- 1) .* (1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
-plot(u, [y1, y2, y3]; label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-28435b9c.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
+plot(u, [y1, y2, y3]; label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-df70192a.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
 <ul>
 <li><p>📦 <a href="assets/./Project.toml">Project.toml</a> - Package dependencies</p>
 </li>
@@ -42,7 +42,7 @@ Environment:
   [98b081ad] Literate v2.20.1
   [f4238b75] NLPModelsIpopt v0.11.0
   [5f98b655] OptimalControl v1.1.6
-  [3a975481] PWLdynamics v0.3.5 `~/work/PWLdynamics.jl/PWLdynamics.jl`
+  [3a975481] PWLdynamics v0.3.6 `~/work/PWLdynamics.jl/PWLdynamics.jl`
   [91a5bcdd] Plots v1.41.1</code></pre></details><details style="margin-bottom: 0.5em;"><summary>📚 Complete manifest</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/PWLdynamics.jl/PWLdynamics.jl/docs/Manifest.toml`
   [54578032] ADNLPModels v0.8.13
   [47edcb42] ADTypes v1.18.0
@@ -119,7 +119,7 @@ Environment:
   [4d8831e6] OpenSSL v1.6.0
   [5f98b655] OptimalControl v1.1.6
   [bac558e1] OrderedCollections v1.8.1
-  [3a975481] PWLdynamics v0.3.5 `~/work/PWLdynamics.jl/PWLdynamics.jl`
+  [3a975481] PWLdynamics v0.3.6 `~/work/PWLdynamics.jl/PWLdynamics.jl`
   [d96e819e] Parameters v0.12.3
   [69de0a69] Parsers v2.8.3
   [ccf2f8ad] PlotThemes v3.3.0
@@ -143,7 +143,7 @@ Environment:
   [ff4d7338] SolverCore v0.3.8
   [a2af1166] SortingAlgorithms v1.2.2
   [9f842d2f] SparseConnectivityTracer v1.1.2
-  [0a514795] SparseMatrixColorings v0.4.22
+  [0a514795] SparseMatrixColorings v0.4.23
   [276daf66] SpecialFunctions v2.6.1
   [860ef19b] StableRNGs v1.0.3
   [90137ffa] StaticArrays v1.9.15
@@ -301,4 +301,4 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.15.0+0
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.5.0+2
-Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. <a href="https://hal.science/hal-04820387">https://hal.science/hal-04820387</a>.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="bistable.html">Bistable toggle switch »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Friday 31 October 2025 10:55">Friday 31 October 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. <a href="https://hal.science/hal-04820387">https://hal.science/hal-04820387</a>.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="bistable.html">Bistable toggle switch »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Sunday 2 November 2025 13:13">Sunday 2 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
