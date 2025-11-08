@@ -13,12 +13,12 @@ x = range(0, 4; length=100)
 y1 = (x .&gt; θ)
 y2 = x .^ k ./ (x .^ k .+ θ^k)
 y3 = 1 .- 1 ./ (1 .+ exp.(k*(x .- θ)))
-plot(x, [y1, y2, y3]; label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-2cd4c10e.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">k = 5
+plot(x, [y1, y2, y3]; label=[&quot;s⁺&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;x&quot;)</code></pre><img src="index-515e623a.svg" alt="Example block output"/><p>and for <span>$|u-1|$</span>:</p><pre><code class="language-julia hljs">k = 5
 u = range(0, 2; length=100)
 y1 = abs.(u .- 1)
 y2 = (u .- 1) .* (u .^ k .- 1) ./ (u .^ k .+ 1)
 y3 = (u .- 1) .* (1 .- 2 ./ (1 .+ exp.(k .* (u .- 1))))
-plot(u, [y1, y2, y3]; label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-ad4a4997.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
+plot(u, [y1, y2, y3]; label=[&quot;|u-1|&quot; &quot;Hill&quot; &quot;Exponential&quot;], xlabel=&quot;u&quot;)</code></pre><img src="index-710c8611.svg" alt="Example block output"/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
 <ul>
 <li><p>📦 <a href="assets/./Project.toml">Project.toml</a> - Package dependencies</p>
 </li>
@@ -96,7 +96,7 @@ Environment:
   [92d709cd] IrrationalConstants v0.2.6
   [1019f520] JLFzf v0.1.11
   [692b3bcd] JLLWrappers v1.7.1
-  [682c06a0] JSON v1.2.0
+  [682c06a0] JSON v1.2.1
   [b964fa9f] LaTeXStrings v1.4.0
   [23fbe1c1] Latexify v0.16.10
   [0e77f7df] LazilyInitializedFields v1.3.0
@@ -151,7 +151,7 @@ Environment:
   [10745b16] Statistics v1.11.1
   [82ae8749] StatsAPI v1.7.1
   [2913bbd2] StatsBase v0.34.7
-  [ec057cc2] StructUtils v2.5.1
+  [ec057cc2] StructUtils v2.6.0
   [62fd8b95] TensorCore v0.1.1
   [a759f4b9] TimerOutputs v0.5.29
   [3bb67fe8] TranscodingStreams v0.11.3
@@ -301,4 +301,4 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.15.0+0
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.5.0+2
-Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. <a href="https://hal.science/hal-04820387">https://hal.science/hal-04820387</a>.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="bistable.html">Bistable toggle switch »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Friday 7 November 2025 09:05">Friday 7 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Agustín G. Yabo, Nicolas Augier. On L¹ and time-optimal state transitions in piecewise linear models of gene-regulatory networks. Preprint. 2024. <a href="https://hal.science/hal-04820387">https://hal.science/hal-04820387</a>.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="bistable.html">Bistable toggle switch »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Saturday 8 November 2025 10:07">Saturday 8 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
